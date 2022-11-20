@@ -1,0 +1,53 @@
+version: "3.9"
+
+services:
+
+  postgres:
+    image: postgres:14.4
+    ports:
+      - "127.0.0.1:5432:5432"
+    container_name: postgresql-news-service
+    environment:
+      POSTGRES_USER: "user"
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_DB: "news"
+    volumes:
+      - news-volumes:/var/lib/postgresql/service
+      - ./postgres.conf:/etc/postgresql/postgresql.conf
+    command:
+      - "postgres"
+      - "-c"
+      - "config_file=/etc/postgresql/postgresql.conf"
+
+  service:
+    depends_on:
+      - postgres
+    build:
+      context: .
+      dockerfile: ./cmd/service/Dockerfile
+    container_name: 'news-service'
+    environment:
+      PATH: /
+    command: service
+    restart: always
+    volumes:
+      - $PWD/config.yaml:/config.yaml
+
+  client:
+    depends_on:
+      - postgres
+    build:
+      context: .
+      dockerfile: cmd/client/Dockerfile
+    container_name: 'news-client'
+    environment:
+      PATH: /
+    command: client
+    restart: always
+    ports:
+      - "9000:9000"
+    volumes:
+      - $PWD/config.yaml:/config.yaml
+
+volumes:
+  news-volumes:

@@ -1,0 +1,15 @@
+# HTTP server address
+service: "http://www.nkj.ru/rss/iblock_rss_31.xml"
+client: ":9000"
+
+# Postgres configuration
+pg:
+  host: postgres
+  port: 5432
+  user: user
+  password: password
+  db_name: news
+
+# logger level set
+# debug,info,error,fatal. error on default
+log: info
