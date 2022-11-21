@@ -1,15 +1,3 @@
-.PHONY: receiver validator data mailing client
-service: s_build
-	@./service
-s_build:
-	@go build -o service ./cmd/service/*.go
-
-client: c_build
-	@./client
-c_build:
-	@go build -o client ./cmd/client/*.go
-
-
 MIGRATION_DIR:=./migrations
 .PHONY: create migrate
 create:
@@ -18,4 +6,12 @@ create:
 migrate:
 	./migrate.sh
 
-#goose -v -dir ./migrations postgres "host=localhost port=5432 user=user password=password dbname=news sslmode=disable" down-to 20221120203355
+.PHONY: up, build
+up:
+	docker-compose -f docker-compose.psql.yaml up -d
+	make migrate
+	docker-compose -f docker-compose.services.yaml up -d
+
+build:
+	docker-compose -f docker-compose.psql.yaml build
+	docker-compose -f docker-compose.services.yaml build
