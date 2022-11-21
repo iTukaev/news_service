@@ -1,0 +1,23 @@
+version: "3.9"
+
+services:
+
+  postgres:
+    image: postgres:14.4
+    ports:
+      - "127.0.0.1:5432:5432"
+    container_name: postgresql-news-service
+    environment:
+      POSTGRES_USER: "user"
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_DB: "news"
+    volumes:
+      - news-volumes:/var/lib/postgresql/service
+      - ./postgres.conf:/etc/postgresql/postgresql.conf
+    command:
+      - "postgres"
+      - "-c"
+      - "config_file=/etc/postgresql/postgresql.conf"
+
+volumes:
+  news-volumes:

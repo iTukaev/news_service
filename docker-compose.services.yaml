@@ -1,0 +1,29 @@
+version: "3.9"
+
+services:
+
+  service:
+    build:
+      context: .
+      dockerfile: ./cmd/service/Dockerfile
+    container_name: 'news-service'
+    environment:
+      PATH: /
+    command: service
+    restart: always
+    volumes:
+      - $PWD/config.yaml:/config.yaml
+
+  client:
+    build:
+      context: .
+      dockerfile: cmd/client/Dockerfile
+    container_name: 'news-client'
+    environment:
+      PATH: /
+    command: client
+    restart: always
+    ports:
+      - "9000:9000"
+    volumes:
+      - $PWD/config.yaml:/config.yaml
