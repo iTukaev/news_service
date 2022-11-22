@@ -26,3 +26,27 @@
 
 P.S. Если вы хотите посмотреть на работу с какими-то конкретными штуками из того, что я не сделал, то просто напишите. Если это не супер много, то я добавлю что-то.
 Ну и если есть вопросы по каким-то моментам реализации тоже можно обсудить))
+
+
+## Запуск
+1. ### Через make
+* make build
+* make up
+
+2. ### Через docker-compose
+Можно исключить Postgres, если хотите пользоваться своей сборкой. Но надо провести миграции.
+
+* docker-compose -f docker-compose.psql.yaml up -d
+* make migrate
+* docker-compose -f docker-compose.services.yaml up -d
+
+3. ### Запросы на получение данных
+Сервис клиента стартует на localhost:9000. Можно поменять в config.yaml
+
+Получение списка новостей
+
+curl --location --request GET 'http://localhost:9000/news-list?size=5&page=1&order=false'
+
+Получение новости по содержимому и заголовку
+
+curl --location --request GET 'http://localhost:9000/news?search="вспомогательных клетках мозга"'
